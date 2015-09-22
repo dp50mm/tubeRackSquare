@@ -5,10 +5,13 @@
 // To export, set the dimension variable in the BoxAsFletFile module to "2D"
 // Click render, then export as SVG.
 
+
 iTubes = 4;
 jTubes = 4;
 
-tubeRadius = 14; // mm
+
+
+tubeRadius = 14.25; // mm
 tubePadding = 5; // mm
 tubeHeight = 100; // mm
 holderHeight = 70; // mm
@@ -32,7 +35,7 @@ handHolderHeight = 20; // mm
 laserCutPieceSpacing = 20; // mm (layout of 2d pieces)
 
 // margin so that the teeth fit in the cutout.
-laserCutLaserMargin = 0.05;
+laserCutLaserMargin = -0.05;
 
 // CALCULATED VARS
 connectionPadding = boltDiameter * 3;
@@ -55,7 +58,7 @@ echo(str("number of teeth is: ",numberOfTeeth));
 
 module BoltSilhouetteCutout(dimensions)
 {
-    
+
     translate([0,-nutWidth/2,0]) {
         union() {
             translate([0,nutWidth/2-boltDiameter/2,0]) {
@@ -114,7 +117,7 @@ module TeethRow(dimensions, laserMargin)
 {
     // centering the teeth row
     teethRowLength = numberOfTeeth*(teethWidth+teethSpacing)-teethSpacing;
-            
+
     echo(str("teeth row length: ",teethRowLength,"mm"));
     teethRowMargin = boxLength-teethRowLength;
     translate([0,teethRowMargin/2,0]) {
@@ -162,7 +165,7 @@ module BottomPlate(dimensions)
 
 module HolderPlate(tubeR,tubeP,teethWidth, iTubes,jTubes, connectionPadding, dimensions)
 {
-    
+
     difference() {
         union() {
             if(dimensions == "3D") {
@@ -173,10 +176,10 @@ module HolderPlate(tubeR,tubeP,teethWidth, iTubes,jTubes, connectionPadding, dim
             Teeth(dimensions,0);
         }
         union() {
-            for (i = [1:iTubes]) { 
+            for (i = [1:iTubes]) {
                 translate([tubeR+tubeP+connectionPadding-materialThickness,
                     i*(tubeR*2+tubeP)-tubeR+connectionPadding,
-                    0]) 
+                    0])
                 {
                     for(j = [1:jTubes]) {
                         translate([j*(tubeR*2+tubeP)-tubeR*2-tubeP,0,0]) {
@@ -229,7 +232,7 @@ module SideWall(teethWidth, connectionPadding, dimensions)
                 translate([boxHeight/1.5,holderMargin/2,0]) {
                     if(dimensions == "3D") {
                         cylinder(
-                            materialThickness, 
+                            materialThickness,
                             handHolderHeight/2,
                             handHolderHeight/2, $fn=100);
                     } else if(dimensions =="2D") {
@@ -247,7 +250,7 @@ module SideWall(teethWidth, connectionPadding, dimensions)
                     translate([0,handHolderSize,0]) {
                         if(dimensions == "3D") {
                             cylinder(
-                                materialThickness, 
+                                materialThickness,
                                 handHolderHeight/2,
                                 handHolderHeight/2, $fn=100);
                         } else if(dimensions =="2D") {
@@ -276,7 +279,7 @@ module boltHole(dimensions) {
 module boxAsFlatFile() {
     moduleDimensions = "2D";
     BottomPlate(moduleDimensions);
-    
+
     translate([boxWidth+laserCutPieceSpacing,0,0]) {
         HolderPlate(
             tubeRadius,
@@ -286,7 +289,7 @@ module boxAsFlatFile() {
             jTubes,
             connectionPadding,
             moduleDimensions);
-        
+
         translate([boxWidth+laserCutPieceSpacing+connectionPadding,0,0]) {
             HolderPlate(
                 tubeRadius,
@@ -296,7 +299,7 @@ module boxAsFlatFile() {
                 jTubes,
                 connectionPadding,
                 moduleDimensions);
-            
+
             translate([boxWidth+laserCutPieceSpacing+connectionPadding,0,0]) {
                 SideWall(
                     teethWidth,
@@ -328,19 +331,19 @@ module boxIn3D(expanded) {
             connectionPadding,
             moduleDimensions);
     }
-        
+
     translate([materialThickness,0,holderHeight-boltDiameter*2]) {
         HolderPlate(
             tubeRadius,
             tubePadding,
-            teethWidth, 
+            teethWidth,
             iTubes,
             jTubes,
             connectionPadding,
             moduleDimensions);
     }
     translate([materialThickness-expanded,0,0]) {
-        rotate([0,-90,0]) { 
+        rotate([0,-90,0]) {
             SideWall(
                 teethWidth,
                 connectionPadding,
@@ -348,7 +351,7 @@ module boxIn3D(expanded) {
         }
     }
     translate([boxWidth+expanded,0,0]) {
-        rotate([0,-90,0]) 
+        rotate([0,-90,0])
             {
             SideWall(
                 teethWidth,
@@ -357,6 +360,9 @@ module boxIn3D(expanded) {
         }
     }
 }
+
+scale([1,1,1]) {
+
 boxAsFlatFile();
 
 translate([0,-boxLength-100,0]) {
@@ -367,3 +373,4 @@ translate([0,-boxLength*2-150,0]) {
     boxIn3D(5);
 }
 
+}
