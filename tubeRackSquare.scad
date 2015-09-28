@@ -20,7 +20,7 @@ materialThickness = 3; // mm
 bottomHolderZPosition = 20; // mm (measured from bottom of the box)
 
 boltDiameter = 3; // mm
-depth = 7.2; // mm
+boltLength = 10; // mm
 nutWidth = 5.6; // mm
 nutHeight = 2.2; // mm
 boltPosition = 2; // mm
@@ -63,7 +63,7 @@ module BoltSilhouetteCutout(dimensions)
         union() {
             translate([0,nutWidth/2-boltDiameter/2,0]) {
                 if(dimensions == "3D") {
-                    cube([depth,boltDiameter,materialThickness]);
+                    cube([boltLength-materialThickness+0.2,boltDiameter,materialThickness]);
                 } else if(dimensions == "2D") {
                     square([depth,boltDiameter]);
                 }
@@ -276,8 +276,8 @@ module boltHole(dimensions) {
 }
 
 
-module boxAsFlatFile() {
-    moduleDimensions = "2D";
+module boxAsFlatFile(dimensions) {
+    moduleDimensions = dimensions;
     BottomPlate(moduleDimensions);
 
     translate([boxWidth+laserCutPieceSpacing,0,0]) {
@@ -316,8 +316,8 @@ module boxAsFlatFile() {
     }
 }
 
-module boxIn3D(expanded) {
-    moduleDimensions = "3D";
+module boxIn3D(dimensions,expanded) {
+    moduleDimensions = dimensions;
     translate([materialThickness,0,boltDiameter*2]) {
         BottomPlate(moduleDimensions);
     }
@@ -363,14 +363,14 @@ module boxIn3D(expanded) {
 
 scale([1,1,1]) {
 
-boxAsFlatFile();
+boxAsFlatFile("2D");
 
 translate([0,-boxLength-100,0]) {
-    boxIn3D(0);
+    boxIn3D("3D",0);
 }
 
 translate([0,-boxLength*2-150,0]) {
-    boxIn3D(5);
+    boxIn3D("3D",20);
 }
 
 }
