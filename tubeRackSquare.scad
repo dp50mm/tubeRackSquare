@@ -6,13 +6,13 @@
 // Click render, then export as SVG.
 
 
-iTubes = 4;
-jTubes = 4;
+iTubes = 6;
+jTubes = 2;
 
 
 
-tubeRadius = 14.25; // mm
-tubePadding = 5; // mm
+tubeRadius = 15.25; // mm
+tubePadding = 10; // mm
 tubeHeight = 100; // mm
 holderHeight = 70; // mm
 materialThickness = 3; // mm
